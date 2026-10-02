@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>IndiaBPE | Multilingual BPE Tokenizer</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+font-family:Arial,sans-serif;
+color:#f5f7ff;
+background:
+radial-gradient(circle at 10% 0%,#5630a855,transparent 35%),
+radial-gradient(circle at 90% 10%,#087f9b44,transparent 35%),
+#080b14;
+min-height:100vh;
+}
+.container{width:min(1150px,92%);margin:auto;padding:35px 0 60px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:45px}
+.logo{
+width:45px;height:45px;border-radius:13px;
+display:grid;place-items:center;
+background:linear-gradient(135deg,#8b5cf6,#3b82f6);
+font-size:22px;font-weight:bold
+}
+.brand{display:flex;gap:12px;align-items:center}
+.brand h1{font-size:21px}
+.brand p,.muted{color:#8f98ad;font-size:12px;margin-top:3px}
+.badge{
+border:1px solid #ffffff18;
+background:#ffffff08;
+padding:9px 14px;border-radius:30px;font-size:12px
+}
+.eyebrow{
+color:#a78bfa;font-size:11px;
+font-weight:bold;letter-spacing:2px;
+margin-bottom:12px
+}
+.hero h2{font-size:clamp(35px,5vw,58px);line-height:1.05;max-width:760px}
+.gradient{
+background:linear-gradient(90deg,#a78bfa,#60a5fa,#22d3ee);
+-webkit-background-clip:text;color:transparent
+}
+.hero p{max-width:700px;color:#929ab2;line-height:1.7;margin:16px 0 30px}
+.workspace{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{
+background:#ffffff08;
+border:1px solid #ffffff12;
+border-radius:20px;padding:23px;
+box-shadow:0 18px 50px #0005
+}
+.card h3{font-size:17px;margin-bottom:20px}
+label{display:block;color:#aeb6cb;font-size:12px;font-weight:bold;margin-bottom:8px}
+select,textarea{
+width:100%;background:#080c15;color:#fff;
+border:1px solid #ffffff15;border-radius:12px;
+padding:13px;font:inherit;outline:none
+}
+select{height:47px}
+textarea{height:170px;resize:vertical;margin-top:15px;line-height:1.6}
+select:focus,textarea:focus{border-color:#8b5cf6}
+.actions{display:flex;gap:9px;margin-top:13px}
+button{
+border:0;border-radius:11px;padding:12px 16px;
+font-weight:bold;cursor:pointer
+}
+.primary{flex:1;color:white;background:linear-gradient(135deg,#8b5cf6,#3b82f6)}
+.secondary{color:#ddd;background:#ffffff0b;border:1px solid #ffffff12}
+.status{color:#5ee6a9;font-size:11px;float:right}
+.result-empty{text-align:center;padding:70px 10px;color:#8f98ad}
+.icon{
+width:55px;height:55px;border-radius:17px;
+display:grid;place-items:center;margin:0 auto 13px;
+background:#8b5cf61a;font-size:24px
+}
+.result{display:none}
+.result.show{display:block}
+.count{font-size:13px;color:#929ab2;margin-bottom:16px}
+.count strong{font-size:38px;color:#fff}
+.tokens{
+display:flex;flex-wrap:wrap;gap:8px;
+padding:15px;background:#0003;
+border:1px solid #ffffff0d;border-radius:13px
+}
+.token{
+padding:7px 10px;border-radius:8px;
+background:#4f8cff20;color:#9fc0ff;
+border:1px solid #4f8cff33;
+font-family:monospace;font-size:13px
+}
+.token:nth-child(3n){background:#8b5cf620;color:#c9b9ff}
+.token:nth-child(3n+1){background:#22d3ee18;color:#8de9f5}
+.sub{margin-top:17px}
+.sub h4{
+color:#8992aa;text-transform:uppercase;
+font-size:10px;letter-spacing:1.2px;margin-bottom:7px
+}
+.code{
+background:#060910;border:1px solid #ffffff10;
+border-radius:10px;padding:12px;
+font:12px monospace;color:#b8c1d5;
+overflow-wrap:anywhere
+}
+.section{margin-top:38px}
+.section h3{font-size:21px;margin-bottom:5px}
+.section>p{color:#8f98ad;font-size:12px;margin-bottom:15px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.metric,.stat{
+background:#ffffff08;border:1px solid #ffffff10;
+border-radius:15px;padding:18px
+}
+.metric .name{font-weight:bold;font-size:14px}
+.metric .fertility{font-size:29px;font-weight:bold;margin-top:13px}
+.metric small{color:#8f98ad}
+.mini{border-top:1px solid #ffffff10;margin-top:13px;padding-top:10px;color:#8f98ad;font-size:11px}
+.download{display:inline-block;margin:0 0 15px;padding:9px 12px;border-radius:8px;background:#ffffff0b;border:1px solid #ffffff18;color:#d8e3f5;text-decoration:none;font-size:12px;font-weight:bold}
+.download:hover{background:#ffffff14}
+.score p strong{font-size:12px;color:#fca5a5}
+.score p strong[data-met="true"]{color:#5ee6a9}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.stat small{color:#8992aa;text-transform:uppercase;font-size:10px}
+.stat strong{display:block;font-size:19px;margin-top:7px}
+.score{
+margin-top:15px;padding:23px;
+border-radius:18px;border:1px solid #8b5cf644;
+background:#8b5cf610;
+display:flex;justify-content:space-between;align-items:center
+}
+.score p{color:#8f98ad;font-size:12px;margin-top:4px}
+.score strong{font-size:42px;color:#a78bfa}
+.error{
+display:none;margin-top:10px;padding:10px;
+border-radius:9px;background:#ef44441a;
+color:#fca5a5;font-size:12px
+}
+.error.show{display:block}
+footer{text-align:center;color:#596174;font-size:11px;margin-top:45px}
+@media(max-width:850px){
+.workspace{grid-template-columns:1fr}
+.metrics{grid-template-columns:1fr 1fr}
+.stats{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:550px){
+.badge{display:none}
+.container{width:94%;padding-top:22px}
+.metrics{grid-template-columns:1fr 1fr}
+.stats{grid-template-columns:1fr 1fr}
+.actions{flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+<header>
+<div class="brand">
+<div class="logo">B</div>
+<div>
+<h1>IndiaBPE</h1>
+<p>Multilingual BPE Tokenizer</p>
+</div>
+</div>
+<div class="badge">ERA-V5-S2 · Assignment 2</div>
+</header>
+
+<section class="hero">
+<div class="eyebrow">MULTILINGUAL NLP LABORATORY</div>
+<h2>Explore how BPE <span class="gradient">understands language.</span></h2>
+<p>
+A multilingual Byte Pair Encoding tokenizer trained on
+English, Hindi, Telugu and Kannada. Enter text and inspect
+tokens, token IDs and decoded output.
+</p>
+</section>
+
+<section class="workspace">
+
+<div class="card">
+<div class="status">● Model Ready</div>
+<h3>Tokenizer Playground</h3>
+
+<label>Language</label>
+<select id="language">
+<option value="english">English</option>
+<option value="hindi">Hindi</option>
+<option value="telugu">Telugu</option>
+<option value="kannada">Kannada</option>
+</select>
+
+<label style="margin-top:16px">Input Text</label>
+<textarea id="text" placeholder="Enter text to tokenize..."></textarea>
+
+<div class="actions">
+<button class="primary" id="tokenizeBtn">Tokenize Text</button>
+<button class="secondary" id="sampleBtn">Sample</button>
+<button class="secondary" id="clearBtn">Clear</button>
+</div>
+
+<div class="error" id="error"></div>
+</div>
+
+<div class="card">
+<h3>Tokenization Result</h3>
+
+<div class="result-empty" id="emptyResult">
+<div class="icon">⌁</div>
+<div>Enter text and tokenize it</div>
+<div class="muted">Your trained BPE tokenizer will process it here.</div>
+</div>
+
+<div class="result" id="resultContent">
+
+<div class="count">
+<strong id="tokenCount">0</strong> tokens generated
+</div>
+
+<div class="sub">
+<h4>BPE Tokens</h4>
+<div class="tokens" id="tokens"></div>
+</div>
+
+<div class="sub">
+<h4>Token IDs</h4>
+<div class="code" id="tokenIds">—</div>
+</div>
+
+<div class="sub">
+<h4>Decoded Text</h4>
+<div class="code" id="decoded">—</div>
+</div>
+
+</div>
+</div>
+
+</section>
+
+<section class="section">
+<h3>Language Evaluation</h3>
+<p>Fertility is tokens per whitespace-delimited word in each Wikipedia article.</p>
+
+<div class="metrics" id="languageMetrics">
+
+<div class="metric">
+<div class="name">English</div>
+<div class="fertility">—</div>
+<small>Tokens per word</small>
+</div>
+
+<div class="metric">
+<div class="name">Hindi</div>
+<div class="fertility">—</div>
+<small>Tokens per word</small>
+</div>
+
+<div class="metric">
+<div class="name">Telugu</div>
+<div class="fertility">—</div>
+<small>Tokens per word</small>
+</div>
+
+<div class="metric">
+<div class="name">Kannada</div>
+<div class="fertility">—</div>
+<small>Tokens per word</small>
+</div>
+
+</div>
+</section>
+
+<section class="section">
+<h3>Assignment Metrics</h3>
+<p>X values are sorted from lowest to highest fertility.</p>
+<div class="vocab-actions">
+<a class="download" href="/api/vocab?view=1" target="_blank" rel="noopener">View full vocabulary</a>
+<a class="download" href="/api/vocab" download="indiabpe-vocabulary.json">Download vocabulary JSON</a>
+</div>
+
+<div class="stats">
+<div class="stat"><small id="x1Label">X1</small><strong id="x1">—</strong></div>
+<div class="stat"><small id="x2Label">X2</small><strong id="x2">—</strong></div>
+<div class="stat"><small id="x3Label">X3</small><strong id="x3">—</strong></div>
+<div class="stat"><small id="x4Label">X4</small><strong id="x4">—</strong></div>
+<div class="stat"><small>Spread</small><strong id="spread">—</strong></div>
+<div class="stat"><small>Vocabulary</small><strong id="vocabSize">—</strong></div>
+</div>
+</section>
+
+<div class="score">
+<div>
+<h3>Assignment Evaluation Score</h3>
+<p>Score = 1000 / (X4 − X1). English target: <strong id="englishTargetStatus">—</strong></p>
+</div>
+<strong id="score">—</strong>
+</div>
+
+<footer>
+ERA-V5-S2 · Assignment 2 · Multilingual BPE Tokenizer
+</footer>
+
+</main>
+
+<script src="./app.js"></script>
+
+</body>
+</html>
+Jot something down

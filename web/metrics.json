@@ -1,0 +1,30 @@
+{
+  "languages": {
+    "english": {
+      "tokens": 14946,
+      "faithful_units": 14688,
+      "fertility": 1.0175653594771241
+    },
+    "hindi": {
+      "tokens": 29525,
+      "faithful_units": 9527,
+      "fertility": 3.0990868059200167
+    },
+    "telugu": {
+      "tokens": 14381,
+      "faithful_units": 3337,
+      "fertility": 4.309559484566976
+    },
+    "kannada": {
+      "tokens": 5252,
+      "faithful_units": 1351,
+      "fertility": 3.8874907475943745
+    }
+  },
+  "x1": 1.0175653594771241,
+  "x2": 3.0990868059200167,
+  "x3": 3.8874907475943745,
+  "x4": 4.309559484566976,
+  "spread": 3.291994125089852,
+  "score": 303.76724927256845
+}

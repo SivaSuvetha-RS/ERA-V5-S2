@@ -1,15 +1,18 @@
+import requests
+from pathlib import Path
+
 LANGUAGES = {
-    "english": "en",
-    "hindi": "hi",
-    "telugu": "te",
-    "kannada": "kn",
+    "english": ("en", "India"),
+    "hindi": ("hi", "भारत"),
+    "telugu": ("te", "భారతదేశం"),
+    "kannada": ("kn", "ಭಾರತ"),
 }
 
 OUTPUT_DIR = Path("data/corpus")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def download_wikipedia_article(language_code):
+def download_wikipedia_article(language_code, title):
     url = (
         f"https://{language_code}.wikipedia.org/w/api.php"
     )
@@ -18,7 +21,7 @@ def download_wikipedia_article(language_code):
         "action": "query",
         "prop": "extracts",
         "explaintext": True,
-        "titles": "India",
+        "titles": title,
         "format": "json",
         "redirects": 1,
     }
@@ -46,10 +49,10 @@ def download_wikipedia_article(language_code):
 
 
 def main():
-    for language, code in LANGUAGES.items():
+    for language, (code, title) in LANGUAGES.items():
         print(f"Downloading {language}...")
 
-        text = download_wikipedia_article(code)
+        text = download_wikipedia_article(code, title)
 
         output_file = OUTPUT_DIR / f"{language}.txt"
         output_file.write_text(text, encoding="utf-8")

@@ -1,0 +1,56 @@
+{
+  "languages": {
+    "english": {
+      "tokens": 14040,
+      "words": 11776,
+      "fertility": 1.1922554347826086
+    },
+    "hindi": {
+      "tokens": 16478,
+      "words": 8243,
+      "fertility": 1.9990294795584131
+    },
+    "telugu": {
+      "tokens": 5046,
+      "words": 2511,
+      "fertility": 2.009557945041816
+    },
+    "kannada": {
+      "tokens": 2108,
+      "words": 1019,
+      "fertility": 2.0686947988223747
+    }
+  },
+  "rankings": [
+    {
+      "rank": "X1",
+      "language": "english",
+      "fertility": 1.1922554347826086
+    },
+    {
+      "rank": "X2",
+      "language": "hindi",
+      "fertility": 1.9990294795584131
+    },
+    {
+      "rank": "X3",
+      "language": "telugu",
+      "fertility": 2.009557945041816
+    },
+    {
+      "rank": "X4",
+      "language": "kannada",
+      "fertility": 2.0686947988223747
+    }
+  ],
+  "x1": 1.1922554347826086,
+  "x2": 1.9990294795584131,
+  "x3": 2.009557945041816,
+  "x4": 2.0686947988223747,
+  "spread": 0.8764393640397661,
+  "score": 1140.9802446465967,
+  "vocab_size": 10000,
+  "english_target": 1.2,
+  "english_target_met": true,
+  "word_count_method": "whitespace-delimited words"
+}

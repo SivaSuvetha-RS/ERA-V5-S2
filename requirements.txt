@@ -1,3 +1,4 @@
 tokenizers
-datasets
-transformers
+Flask
+gunicorn
+requests
