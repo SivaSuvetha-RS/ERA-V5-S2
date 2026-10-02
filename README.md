@@ -43,8 +43,22 @@ checked separately and must be at most 1.2. The widget reads the generated
 `evaluation/metrics.json`; it does not hardcode score claims.
 
 The vocabulary download at `/api/vocab` is JSON containing all 10,000 token
-strings and their IDs, sorted by ID. Deploy the Flask application (not only
-the static HTML) to a host that supports Python so its tokenizer and API routes
-are available to the widget. A Render Blueprint is provided in `render.yaml`;
-connect this repository to Render to create a public service URL. This local
-workspace cannot create that public URL without access to a hosting account.
+strings and their IDs, sorted by ID.
+
+## Deploy Free on Vercel
+
+Vercel's Hobby plan is free for personal projects within its usage limits.
+The root `app.py` exposes the existing Flask app as a Python WSGI function, so
+the widget, tokenizer, metrics, and vocabulary download deploy together.
+
+1. Push the latest changes to GitHub.
+2. Sign in to Vercel with GitHub, choose **Add New → Project**, and import
+	`SivaSuvetha-RS/ERA-V5-S2`.
+3. Leave the root directory and build settings at their detected defaults,
+	then choose **Deploy**. Vercel installs dependencies from `requirements.txt`.
+4. Open the generated `vercel.app` URL and verify `/api/health` returns
+	`"status":"ok"`; submit the site's root URL.
+
+Hobby usage limits apply; this is a personal-project tier, not a promise of
+unlimited compute. The Codespaces forwarded-port URL remains a temporary
+preview and may require GitHub sign-in.
