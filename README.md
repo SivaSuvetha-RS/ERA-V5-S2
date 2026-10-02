@@ -43,7 +43,9 @@ checked separately and must be at most 1.2. The widget reads the generated
 `evaluation/metrics.json`; it does not hardcode score claims.
 
 The vocabulary download at `/api/vocab` is JSON containing all 10,000 token
-strings and their IDs, sorted by ID.
+strings and their IDs, sorted by ID. The original trained tokenizer artifact
+is available at `/api/tokenizer` as `tokenizer.json` for independent
+verification and reuse.
 
 ## Deploy Free on Vercel
 

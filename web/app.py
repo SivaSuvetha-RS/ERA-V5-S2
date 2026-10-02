@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_file, send_from_directory
 from tokenizers import Tokenizer
 import json
 import os
@@ -78,6 +78,16 @@ def get_vocabulary():
             'attachment; filename="indiabpe-vocabulary.json"'
         )
     return response
+
+
+@app.route("/api/tokenizer")
+def download_tokenizer():
+    return send_file(
+        TOKENIZER_PATH,
+        mimetype="application/json",
+        as_attachment=True,
+        download_name="tokenizer.json",
+    )
 
 
 @app.route("/api/tokenize", methods=["POST"])
